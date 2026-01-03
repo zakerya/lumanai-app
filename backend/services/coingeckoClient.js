@@ -3,53 +3,122 @@ import axios from "axios";
 
 const API = "https://api.coingecko.com/api/v3";
 
-/**
- * Get simple price for a coin id (e.g. "bitcoin")
- */
+// Simple in-memory cache
+const cache = new Map();
+
+const CACHE_TTL = {
+  price: 30 * 1000,
+  stats: 60 * 1000,
+  global: 120 * 1000,
+  chart: 60 * 1000,
+};
+
+function getCache(key, ttl) {
+  const cached = cache.get(key);
+  if (cached && Date.now() - cached.timestamp < ttl) {
+    return cached.data;
+  }
+  return null;
+}
+
+function setCache(key, data) {
+  cache.set(key, {
+    data,
+    timestamp: Date.now(),
+  });
+  // Limit cache size
+  if (cache.size > 100) {
+    const firstKey = cache.keys().next().value;
+    cache.delete(firstKey);
+  }
+}
+
 export async function getCoinPrice(id) {
-  const res = await axios.get(`${API}/simple/price`, {
-    params: {
-      ids: id,
-      vs_currencies: "usd",
-    },
-  });
-  return res.data;
+  const cacheKey = `price:${id}`;
+  const cached = getCache(cacheKey, CACHE_TTL.price);
+  if (cached) return cached;
+
+  try {
+    const res = await axios.get(`${API}/simple/price`, {
+      params: {
+        ids: id,
+        vs_currencies: "usd",
+        include_24hr_change: true,
+      },
+      timeout: 10000,
+      headers: {
+        'User-Agent': 'Luminai/1.0',
+        'Accept': 'application/json'
+      }
+    });
+    
+    setCache(cacheKey, res.data);
+    return res.data;
+  } catch (error) {
+    console.error(`Error fetching price for ${id}:`, error.message);
+    throw error;
+  }
 }
 
-/**
- * Get global crypto market data (market cap, volume, dominance, etc.)
- */
 export async function getGlobalMarketData() {
-  const res = await axios.get(`${API}/global`);
-  return res.data;
+  const cacheKey = "global";
+  const cached = getCache(cacheKey, CACHE_TTL.global);
+  if (cached) return cached;
+
+  try {
+    const res = await axios.get(`${API}/global`, {
+      timeout: 10000,
+      headers: {
+        'User-Agent': 'Luminai/1.0',
+        'Accept': 'application/json'
+      }
+    });
+    
+    setCache(cacheKey, res.data);
+    return res.data;
+  } catch (error) {
+    console.error(`Error fetching global market data:`, error.message);
+    throw error;
+  }
 }
 
-/**
- * Get full coin stats (market cap, supply, ATH, ATL, etc.)
- */
 export async function getCoinStats(id) {
-  const res = await axios.get(`${API}/coins/${id}`, {
-    params: {
-      localization: false,
-      tickers: false,
-      market_data: true,
-      community_data: false,
-      developer_data: false,
-      sparkline: false,
-    },
-  });
+  const cacheKey = `stats:${id}`;
+  const cached = getCache(cacheKey, CACHE_TTL.stats);
+  if (cached) return cached;
 
-  return res.data;
+  try {
+    const res = await axios.get(`${API}/coins/${id}`, {
+      params: {
+        localization: false,
+        tickers: false,
+        market_data: true,
+        community_data: false,
+        developer_data: false,
+        sparkline: false,
+      },
+      timeout: 10000,
+      headers: {
+        'User-Agent': 'Luminai/1.0',
+        'Accept': 'application/json'
+      }
+    });
+
+    setCache(cacheKey, res.data);
+    return res.data;
+  } catch (error) {
+    console.error(`Error fetching stats for ${id}:`, error.message);
+    throw error;
+  }
 }
 
-/**
- * Get chart data for a coin
- */
 export async function getCoinChartData(coinId, timeframe) {
+  const cacheKey = `chart:${coinId}:${timeframe}`;
+  const cached = getCache(cacheKey, CACHE_TTL.chart);
+  if (cached) return cached;
+
   try {
     const now = Math.floor(Date.now() / 1000);
-
-    // Convert timeframe → seconds
     const ranges = {
       "5m": 60 * 5,
       "15m": 60 * 15,
@@ -66,31 +135,34 @@ export async function getCoinChartData(coinId, timeframe) {
 
     let url;
 
-    // For 24h, 7d, 30d → use simpler endpoint
     if (["24h", "7d", "30d"].includes(timeframe)) {
       const daysMap = {
         "24h": 1,
         "7d": 7,
         "30d": 30,
       };
-
-      url = `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=${daysMap[timeframe]}`;
+      url = `${API}/coins/${coinId}/market_chart?vs_currency=usd&days=${daysMap[timeframe]}`;
     } else {
-      // For 5m, 15m, 30m, 1h, 12h → use range endpoint
-      url = `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart/range?vs_currency=usd&from=${from}&to=${now}`;
+      url = `${API}/coins/${coinId}/market_chart/range?vs_currency=usd&from=${from}&to=${now}`;
     }
 
-    const res = await axios.get(url);
+    const res = await axios.get(url, {
+      timeout: 15000,
+      headers: {
+        'User-Agent': 'Luminai/1.0',
+        'Accept': 'application/json'
+      }
+    });
 
-    // Normalize data
     const prices = res.data.prices.map(([timestamp, price]) => ({
       t: timestamp,
       p: price,
     }));
 
+    setCache(cacheKey, prices);
     return prices;
   } catch (err) {
     console.error("Chart fetch error:", err.message);
-    return null;
+    throw err;
   }
 }
