@@ -1,0 +1,8 @@
+POST http://localhost:5000/api/chat
+Content-Type: application/json
+
+{
+  "message": "price of bitcoin",
+  "coinId": "bitcoin",
+  "symbol": "btc"
+}

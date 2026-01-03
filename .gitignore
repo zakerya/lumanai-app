@@ -1,0 +1,46 @@
+# ===========================
+# Global Node ignores
+# ===========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ===========================
+# Next.js (frontend)
+# ===========================
+frontend/.next/
+frontend/out/
+frontend/build/
+
+# ===========================
+# Backend (Express)
+# ===========================
+backend/node_modules/
+backend/build/
+backend/dist/
+
+# ===========================
+# Environment files
+# ===========================
+*.env
+*.env.local
+*.env.development
+*.env.production
+
+# ===========================
+# OS junk
+# ===========================
+.DS_Store
+Thumbs.db
+
+# ===========================
+# Vercel
+# ===========================
+.vercel/
+
+# ===========================
+# TypeScript
+# ===========================
+*.tsbuildinfo
