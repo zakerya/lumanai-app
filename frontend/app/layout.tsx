@@ -46,8 +46,15 @@ export default function RootLayout({
 
             {/* CoinGecko Status */}
             <div className="flex items-center gap-1.5">
+              <span className="status-dot h-1.5 w-1.5 rounded-full bg-red-500"></span>
+              <span>CoinGecko API</span>
+            </div>
+
+            <span className="text-white/30">•</span>
+
+            <div className="flex items-center gap-1.5">
               <span className="status-dot h-1.5 w-1.5 rounded-full bg-green-400"></span>
-              <span>CoinGecko Market Data</span>
+              <span>CryptoRank API</span>
             </div>
 
             <span className="text-white/30">•</span>

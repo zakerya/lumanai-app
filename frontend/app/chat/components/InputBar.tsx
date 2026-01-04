@@ -3,6 +3,7 @@
 
 import { Send } from "lucide-react";
 import { useRef, useEffect, useState } from "react";
+import { ArrowUp } from "lucide-react";
 
 type Props = {
   input: string;
@@ -146,7 +147,7 @@ export default function InputBar({
               }
             `}
           >
-            <Send size={16} />
+            <ArrowUp size={18} strokeWidth={3}/>
           </button>
         </div>
       </div>
