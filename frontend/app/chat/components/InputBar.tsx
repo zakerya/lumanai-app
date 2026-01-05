@@ -1,4 +1,4 @@
-// app/chat/components/InputBar.tsx
+// frontend/app/chat/components/InputBar.tsx
 "use client";
 
 import { Send } from "lucide-react";
@@ -11,6 +11,7 @@ type Props = {
   isLoading: boolean;
   onSend: (e: React.FormEvent, mode: "general" | "dex") => void;
   onHeightChange?: (h: number) => void;
+  footerHeight?: number;
 };
 
 export default function InputBar({
@@ -19,6 +20,7 @@ export default function InputBar({
   isLoading,
   onSend,
   onHeightChange,
+  footerHeight = 0,
 }: Props) {
   const [mode, setMode] = useState<"general" | "dex">("general");
   const disabled = isLoading || !input.trim();
@@ -57,7 +59,8 @@ export default function InputBar({
   return (
     <form
       onSubmit={(e) => onSend(e, mode)}
-      className="pointer-events-none fixed inset-x-0 bottom-10 flex justify-center px-4"
+      style={{ bottom: footerHeight + 80 }}
+      className="pointer-events-none fixed inset-x-0 flex justify-center px-4 z-40"
     >
       <div
         ref={containerRef}
@@ -67,7 +70,7 @@ export default function InputBar({
           rounded-2xl
           bg-white/10 
           backdrop-blur-xl 
-          border border-white/20 
+          border-2 border-white/20 
           shadow-[0_0_25px_rgba(255,255,255,0.08)]
         "
       >
@@ -77,7 +80,7 @@ export default function InputBar({
             type="button"
             onClick={() => setMode("general")}
             className={`
-              px-3 py-1 text-xs rounded-md border transition
+              px-3 py-1.5 text-xs rounded-full border-2 transition
               ${
                 mode === "general"
                   ? "bg-white text-black border-white"
@@ -92,7 +95,7 @@ export default function InputBar({
             type="button"
             onClick={() => setMode("dex")}
             className={`
-              px-3 py-1 text-xs rounded-md border transition
+              px-3 py-1.5 text-xs rounded-full border-2 transition
               ${
                 mode === "dex"
                   ? "bg-white text-black border-white"

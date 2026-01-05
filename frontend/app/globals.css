@@ -1,4 +1,5 @@
-/* app/global.css */
+/* frontend/app/globals.css */
+
 @import "tailwindcss";
 
 /* -------------------------------------------------------
@@ -145,5 +146,5 @@ html {
 }
 
 .status-dot {
-  animation: statusPulse 1.8s ease-in-out infinite;
+  animation: statusPulse 2s ease-in-out infinite;
 }

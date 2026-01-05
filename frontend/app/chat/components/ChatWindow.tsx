@@ -1,4 +1,4 @@
-// app/chat/components/ChatWindow.tsx
+// frontend/app/chat/components/ChatWindow.tsx
 "use client";
 
 import { Bot } from "lucide-react";
@@ -12,10 +12,8 @@ type Props = {
   messagesEndRef: React.RefObject<HTMLDivElement | null>;
   inputHeight: number;
 
-  // Updated: allow async + mode
   onSend: (text: string, mode: "general" | "dex") => Promise<void> | void;
 
-  // Baseline: still required for chart bubble, but no switching
   onReloadChart: (
     msgId: number,
     coin: { id: string; name: string; symbol: string },
@@ -33,15 +31,22 @@ export default function ChatWindow({
 }: Props) {
   return (
     <main
-      className="flex-1 overflow-y-auto w-full"
-      style={{ paddingBottom: inputHeight + 40 }}
+      className="
+        relative
+        h-full
+        w-full
+        overflow-y-auto
+        overflow-x-hidden
+      "
     >
-      <div className="mx-auto w-full max-w-[48rem] px-4 pt-8 space-y-8">
-        
+      {/* MESSAGE COLUMN */}
+      <div 
+        className="mx-auto w-full max-w-[48rem] px-4 pt-8 space-y-15"
+        style={{
+          paddingBottom: `${inputHeight + 40}px`, // enough space for input bar overlap
+        }}
+      >
         {messages.map((msg) => {
-          /* ---------------------------------------------
-             CHART MESSAGE
-          --------------------------------------------- */
           if (msg.type === "chart") {
             return (
               <ChartBubble
@@ -50,7 +55,6 @@ export default function ChatWindow({
                 coin={msg.coin}
                 timeframe={msg.timeframe}
                 isStreaming={msg.isStreaming}
-                // Baseline: chart reload disabled, but prop required
                 onReloadChart={(tf: string) =>
                   onReloadChart(msg.id, msg.coin, tf)
                 }
@@ -58,9 +62,6 @@ export default function ChatWindow({
             );
           }
 
-          /* ---------------------------------------------
-             TEXT MESSAGE
-          --------------------------------------------- */
           return (
             <MessageBubble
               key={msg.id}
@@ -72,19 +73,16 @@ export default function ChatWindow({
           );
         })}
 
-        {/* ---------------------------------------------
-            LOADING / THINKING INDICATOR
-        --------------------------------------------- */}
         {isLoading && messages[messages.length - 1]?.sender !== "bot" && (
-          <div className="flex items-start gap-4 w-full animate-fadeIn">
-            <div className="flex-shrink-0 mt-1 opacity-90 p-1.5 bg-white/10 rounded-full">
+          <div className="flex items-start gap-4 w-full">
+            <div className="flex-shrink-0 mt-1 p-1.5 bg-white/10 rounded-full">
               <Bot size={18} className="text-white" />
             </div>
 
             <div className="flex items-center gap-1 mt-2.5 ml-1">
-              <span className="w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
-              <span className="w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
-              <span className="w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce"></span>
+              <span className="w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce [animation-delay:-0.3s]" />
+              <span className="w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce [animation-delay:-0.15s]" />
+              <span className="w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce" />
             </div>
           </div>
         )}

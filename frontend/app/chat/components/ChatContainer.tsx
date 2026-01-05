@@ -1,4 +1,4 @@
-// app/chat/components/ChatContainer.tsx
+// frontend/app/chat/components/ChatContainer.tsx
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -37,6 +37,7 @@ Try asking in **General** or switch to **DEX** mode below!`,
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [inputHeight, setInputHeight] = useState(140);
+  const [footerHeight, setFooterHeight] = useState(0);
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -44,13 +45,7 @@ Try asking in **General** or switch to **DEX** mode below!`,
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  /* -------------------------------------------------------
-     MAIN SEND HANDLER (General + DEX)
-  ------------------------------------------------------- */
-  const handleSend = async (
-    messageText: string,
-    mode: "general" | "dex"
-  ) => {
+  const handleSend = async (messageText: string, mode: "general" | "dex") => {
     if (!messageText.trim() || isLoading) return;
 
     const userMessage: Message = {
@@ -81,16 +76,13 @@ Try asking in **General** or switch to **DEX** mode below!`,
 
       const data = await res.json();
 
-      /* -------------------------------------------------------
-         CHART MESSAGE (General mode only)
-      ------------------------------------------------------- */
       if (data.type === "chart") {
         const chartMessage: Message = {
           id: Date.now() + 1,
           type: "chart",
           sender: "bot",
           coin: data.coin,
-          timeframe: "24h", // baseline: always 24h
+          timeframe: "24h",
           data: data.data,
           timestamp: new Date().toISOString(),
           isStreaming: false,
@@ -100,9 +92,6 @@ Try asking in **General** or switch to **DEX** mode below!`,
         return;
       }
 
-      /* -------------------------------------------------------
-         TEXT MESSAGE (General + DEX)
-      ------------------------------------------------------- */
       const responseText =
         data.answer || "Sorry, I couldn't process your request.";
 
@@ -117,7 +106,6 @@ Try asking in **General** or switch to **DEX** mode below!`,
 
       setMessages(prev => [...prev, botMessage]);
 
-      // simple streaming effect
       const delay = Math.max(responseText.length * 10, 1200);
       setTimeout(() => {
         setMessages(prev =>
@@ -165,15 +153,14 @@ Current API: \`${API_BASE}\``,
     }
   };
 
-  /* -------------------------------------------------------
-     BASELINE RESET → NO TIMEFRAME SWITCHING
-  ------------------------------------------------------- */
   const reloadChart = () => {
     console.log("Chart reload disabled in baseline mode.");
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full relative">
+
+      {/* CHAT WINDOW */}
       <ChatWindow
         messages={messages}
         isLoading={isLoading}
@@ -183,6 +170,16 @@ Current API: \`${API_BASE}\``,
         onReloadChart={reloadChart}
       />
 
+      {/* FIXED BLACK BLOCK (messages scroll behind this) */}
+      <div
+        className="pointer-events-none fixed inset-x-0 bg-black z-20"
+        style={{
+          bottom: footerHeight,
+          height: inputHeight,
+        }}
+      />
+
+      {/* INPUT BAR */}
       <InputBar
         input={input}
         setInput={setInput}
@@ -192,6 +189,7 @@ Current API: \`${API_BASE}\``,
           handleSend(input, mode);
         }}
         onHeightChange={setInputHeight}
+        footerHeight={footerHeight}
       />
     </div>
   );
