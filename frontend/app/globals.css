@@ -148,3 +148,65 @@ html {
 .status-dot {
   animation: statusPulse 2s ease-in-out infinite;
 }
+
+/* -------------------------------------------------------
+   Sidebar Animations
+-------------------------------------------------------- */
+
+@layer utilities {
+  /* PANEL OPEN ANIMATION (runs first) */
+  .animate-slideIn {
+    animation: slideIn 0.45s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .animate-slideOut {
+    animation: slideOut 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  @keyframes slideIn {
+    0% { 
+      opacity: 0;
+      transform: translateX(-22px) scale(0.94);
+    }
+    60% {
+      opacity: 1;
+      transform: translateX(0) scale(1.02); /* subtle overshoot */
+    }
+    100% { 
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
+  }
+
+  @keyframes slideOut {
+    0% { 
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
+    60% {
+      opacity: 1;
+      transform: translateX(-10px) scale(0.98); /* subtle pre-exit dip */
+    }
+    100% { 
+      opacity: 0;
+      transform: translateX(-22px) scale(0.94);
+    }
+  }
+
+  /* ITEMS APPEAR AFTER PANEL OPENS */
+  .animate-fadeIn {
+    animation: fadeIn 0.5s ease-out forwards;
+    animation-delay: 0s; /* items wait for panel */
+  }
+
+  @keyframes fadeIn {
+    0% { 
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    100% { 
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

@@ -2,7 +2,15 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { 
+  ArrowUpRight, 
+  BrainCircuit, 
+  LineChart, 
+  ScanSearch, 
+  CheckCircle2, 
+  Search,
+  Zap
+} from "lucide-react";
 
 type Particle = {
   id: number;
@@ -17,11 +25,10 @@ type Particle = {
 export default function Home() {
   const [scrollY, setScrollY] = useState(0);
   const [particles, setParticles] = useState<Particle[]>([]);
-  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  // Removed unused state currentTestimonial to clean up code since it wasn't being rendered
   const hasInitializedParticles = useRef(false);
   const heroRef = useRef<HTMLDivElement | null>(null);
   const tiltRef = useRef<HTMLDivElement | null>(null);
-  const testimonialRef = useRef<HTMLDivElement | null>(null);
 
   // Scroll-based parallax
   useEffect(() => {
@@ -53,14 +60,6 @@ export default function Home() {
     );
 
     setParticles(newParticles);
-  }, []);
-
-  // Auto-rotate testimonials
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTestimonial((prev) => (prev + 1) % 3);
-    }, 5000);
-    return () => clearInterval(interval);
   }, []);
 
   // Simple 3D tilt on hero card
@@ -110,7 +109,7 @@ export default function Home() {
           }
         });
       },
-      { threshold: 0.2 }
+      { threshold: 0.15 }
     );
 
     elements.forEach((el) => observer.observe(el));
@@ -123,7 +122,7 @@ export default function Home() {
   const glowParallax = scrollY * 0.12;
 
   return (
-    <div className="relative min-h-screen bg-black text-white overflow-hidden">
+    <div className="relative min-h-screen bg-black text-white overflow-hidden font-sans selection:bg-white/20">
       {/* BACKGROUND GLOWS */}
       <div className="pointer-events-none absolute inset-0">
         <div
@@ -187,9 +186,9 @@ export default function Home() {
             <div className="flex items-center gap-3 text-xs text-white/50">
               <Link
                 href="/chat"
-                className="flex items-center gap-1 rounded-lg bg-white text-black px-4 py-2 text-xs font-semibold tracking-tight hover:bg-white/90 transition shadow-[0_0_18px_rgba(255,255,255,0.35)]"
+                className="flex items-center gap-2 rounded-xl bg-white text-black px-4 py-2 text-xs font-bold tracking-tight hover:bg-white/90 transition shadow-[0_0_18px_rgba(255,255,255,0.35)]"
               >
-                Luminai Chat <ArrowUpRight className="text-[14px]" />
+                Luminai Chat <ArrowUpRight size={14} />
               </Link>
             </div>
           </nav>
@@ -222,39 +221,6 @@ export default function Home() {
               Ask naturally — get real‑time prices, trends, and explanations
               rendered in a clean, premium interface.
             </p>
-
-            {/* HERO ACTION CARD WITH 3D TILT */}
-            <div
-              ref={tiltRef}
-              className="mt-10 w-full max-w-xl rounded-2xl border border-white/15 bg-white/5 px-5 py-5 shadow-[0_18px_60px_rgba(0,0,0,0.8)] transition-transform duration-300 will-change-transform"
-            >
-              <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-center md:justify-between">
-                <div className="text-left">
-                  <div className="text-[11px] uppercase tracking-[0.18em] text-white/40 mb-1">
-                    Live crypto assistant
-                  </div>
-                  <div className="text-sm md:text-base font-medium text-white/90">
-                    "What&apos;s happening with BTC, ETH and SOL today?"
-                  </div>
-                  <div className="mt-2 text-[11px] text-white/45">
-                    Luminai responds with live prices, clean visuals, and
-                    market context in seconds.
-                  </div>
-                </div>
-
-                <div className="flex flex-col items-stretch gap-2 md:items-end">
-                  <Link
-                    href="/chat"
-                    className="inline-flex items-center justify-center whitespace-nowrap rounded-lg bg-white px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-black hover:bg-white/95 transition shadow-[0_0_22px_rgba(255,255,255,0.5)]"
-                  >
-                    Start chatting
-                  </Link>
-                  <span className="text-[10px] text-white/40">
-                    No sign‑up • Just start typing
-                  </span>
-                </div>
-              </div>
-            </div>
           </div>
         </section>
 
@@ -302,16 +268,8 @@ export default function Home() {
         </section>
 
         {/* FEATURES GRID */}
-        <section className="relative z-10 px-6 py-24 fade-in opacity-0 translate-y-10 transition-all duration-700">
+        <section className="relative z-10 px-6 pt-16 pb-24 fade-in opacity-0 translate-y-10 transition-all duration-700">
           <div className="mx-auto max-w-6xl">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
-                Everything you need in one place
-              </h2>
-              <p className="text-white/60 max-w-2xl mx-auto">
-                Comprehensive tools for modern crypto analysis
-              </p>
-            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
                 {
@@ -356,157 +314,163 @@ export default function Home() {
           </div>
         </section>
 
-        {/* PRICING SECTION */}
-        <section className="relative z-10 px-6 py-24 fade-in opacity-0 translate-y-10 transition-all duration-700">
-          <div className="mx-auto max-w-6xl">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
-                Simple, transparent pricing
-              </h2>
-              <p className="text-white/60 max-w-2xl mx-auto">
-                Choose the plan that fits your needs
-              </p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm">
-                <div className="mb-6">
-                  <h3 className="text-xl font-semibold text-white">Free</h3>
-                  <p className="text-white/60 text-sm mt-1">
-                    Perfect for getting started
-                  </p>
-                </div>
-                <div className="mb-6">
-                  <span className="text-4xl font-bold text-white">$0</span>
-                  <span className="text-white/60 ml-2">/ month</span>
-                </div>
-                <ul className="space-y-3 mb-8">
-                  {[
-                    "Live crypto prices",
-                    "Basic market overview",
-                    "Smart coin detection",
-                    "Clean formatted responses",
-                  ].map((item, i) => (
-                    <li key={i} className="flex items-center text-white/70">
-                      <span className="mr-2">✓</span>
-                      <span className="text-sm">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/chat"
-                  className="block w-full text-center py-3 rounded-lg bg-white/10 border border-white/20 text-white hover:bg-white/20 transition-colors"
-                >
-                  Get Started
-                </Link>
+        {/* --- NEW DEEP DIVE SECTIONS --- */}
+        
+        {/* 1. EDUCATIONAL AI */}
+        <section className="relative z-10 px-6 py-24 border-t border-white/5 fade-in opacity-0 translate-y-10 transition-all duration-700">
+          <div className="mx-auto max-w-6xl flex flex-col md:flex-row items-center gap-12 lg:gap-20">
+            {/* Left: Content */}
+            <div className="flex-1 space-y-6 text-center md:text-left">
+              <div className="inline-flex items-center justify-center md:justify-start gap-2 text-blue-300 mb-2">
+                <BrainCircuit className="w-5 h-5" />
+                <span className="text-xs font-bold uppercase tracking-widest text-white/50">Gemini 2.5 Flash</span>
               </div>
-              <div className="rounded-2xl border border-white/20 bg-white/10 p-8 backdrop-blur-sm relative overflow-hidden">
-                <div className="absolute top-0 right-0 px-4 py-1 bg-white/20 text-xs font-semibold rounded-bl-lg">
-                  POPULAR
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-white">
+                Crypto concepts, <br />
+                <span className="text-white/50">simplified for humans.</span>
+              </h2>
+              <p className="text-white/60 leading-relaxed max-w-lg mx-auto md:mx-0">
+                Stop drowning in jargon. Luminai uses the advanced Gemini 2.5 Flash model to break down complex topics like Staking, DeFi, and Yield Farming into plain English. 
+              </p>
+              <ul className="space-y-3 text-sm text-white/70 inline-block text-left">
+                <li className="flex items-center gap-3">
+                  <CheckCircle2 className="w-4 h-4 text-white/40" />
+                  <span>Beginner-friendly explanations</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <CheckCircle2 className="w-4 h-4 text-white/40" />
+                  <span>Context-aware responses</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Right: Visual Mockup */}
+            <div className="flex-1 w-full max-w-md">
+              <div 
+                ref={tiltRef} // Reusing the tilt ref here for effect
+                className="relative rounded-2xl border border-white/10 bg-gradient-to-b from-white/10 to-black/40 backdrop-blur-xl p-6 shadow-2xl"
+              >
+                {/* Mock Chat UI */}
+                <div className="space-y-4">
+                  <div className="flex justify-end">
+                    <div className="rounded-2xl rounded-tr-sm bg-white text-black px-4 py-3 text-sm font-medium shadow-lg max-w-[85%]">
+                      Explain Impermanent Loss like I'm 5.
+                    </div>
+                  </div>
+                  <div className="flex justify-start">
+                    <div className="rounded-2xl rounded-tl-sm bg-white/10 border border-white/5 text-white/90 px-4 py-3 text-sm leading-relaxed max-w-[95%]">
+                      <div className="flex items-center gap-2 mb-2 text-white/40 text-[10px] uppercase font-bold tracking-wider">
+                        <Zap size={10} /> Luminai AI
+                      </div>
+                      Imagine you have a basket of apples and oranges. If the price of apples goes up, people trade their oranges for your apples. You end up with fewer apples...
+                    </div>
+                  </div>
                 </div>
-                <div className="mb-6">
-                  <h3 className="text-xl font-semibold text-white">Pro</h3>
-                  <p className="text-white/60 text-sm mt-1">
-                    For traders and power users
-                  </p>
-                </div>
-                <div className="mb-6">
-                  <span className="text-4xl font-bold text-white">$12</span>
-                  <span className="text-white/60 ml-2">/ month</span>
-                </div>
-                <ul className="space-y-3 mb-8">
-                  {[
-                    "Everything in Free",
-                    "Full market analytics",
-                    "Multi‑coin comparisons",
-                    "Priority API routing",
-                    "Advanced insights",
-                    "Custom alerts",
-                  ].map((item, i) => (
-                    <li key={i} className="flex items-center text-white/70">
-                      <span className="mr-2">✓</span>
-                      <span className="text-sm">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/chat"
-                  className="block w-full text-center py-3 rounded-lg bg-white text-black hover:bg-white/90 transition-colors font-semibold"
-                >
-                  Upgrade to Pro
-                </Link>
               </div>
             </div>
           </div>
         </section>
 
-        {/* TESTIMONIALS */}
-        <section className="relative z-10 px-6 py-24 fade-in opacity-0 translate-y-10 transition-all duration-700">
-          <div className="mx-auto max-w-4xl">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
-                Trusted by crypto users
+        {/* 2. MARKET DATA */}
+        <section className="relative z-10 px-6 py-24 border-t border-white/5 bg-white/[0.02] fade-in opacity-0 translate-y-10 transition-all duration-700">
+          <div className="mx-auto max-w-6xl flex flex-col md:flex-row-reverse items-center gap-12 lg:gap-20">
+            {/* Right: Content */}
+            <div className="flex-1 space-y-6 text-center md:text-left">
+              <div className="inline-flex items-center justify-center md:justify-start gap-2 text-green-300 mb-2">
+                <LineChart className="w-5 h-5" />
+                <span className="text-xs font-bold uppercase tracking-widest text-white/50">CryptoRank API</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-white">
+                Deep market <br />
+                <span className="text-white/50">intelligence live.</span>
               </h2>
-              <p className="text-white/60">
-                See what our users have to say
+              <p className="text-white/60 leading-relaxed max-w-lg mx-auto md:mx-0">
+                Don't settle for delayed data. Luminai connects directly to CryptoRank to fetch real-time stats. From market cap to circulating supply, get the numbers that move the market instantly.
               </p>
             </div>
-            <div className="relative h-64 overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm">
-              <div
-                className="absolute inset-0 flex transition-transform duration-500 ease-in-out"
-                style={{ transform: `translateX(-${currentTestimonial * 100}%)` }}
-              >
-                {[
-                  {
-                    quote: "Luminai is the first AI that actually understands crypto. Prices, trends, context — all clean and instant.",
-                    author: "Alex Chen",
-                    role: "Day Trader",
-                  },
-                  {
-                    quote: "The formatting alone is worth it. I get clean price blocks and insights without digging through charts.",
-                    author: "Sarah Johnson",
-                    role: "Crypto Analyst",
-                  },
-                  {
-                    quote: "Feels like having a crypto researcher on demand. Fast, accurate, and beautifully designed.",
-                    author: "Marcus Rivera",
-                    role: "Portfolio Manager",
-                  },
-                ].map((testimonial, index) => (
-                  <div
-                    key={index}
-                    className="w-full h-full flex-shrink-0 flex items-center justify-center p-8"
-                  >
-                    <div className="text-center max-w-2xl">
-                      <p className="text-lg md:text-xl text-white/80 italic mb-6">
-                        "{testimonial.quote}"
-                      </p>
-                      <div>
-                        <p className="font-semibold text-white">{testimonial.author}</p>
-                        <p className="text-white/60 text-sm">{testimonial.role}</p>
-                      </div>
-                    </div>
+
+            {/* Left: Visual Mockup */}
+            <div className="flex-1 w-full max-w-md">
+              <div className="grid grid-cols-2 gap-3">
+                {/* Card 1 */}
+                <div className="col-span-2 p-5 rounded-xl border border-white/10 bg-white/5 backdrop-blur-md flex items-center justify-between">
+                  <div>
+                    <div className="text-xs text-white/40 uppercase tracking-wider mb-1">Bitcoin Price</div>
+                    <div className="text-2xl font-mono font-medium">$96,420.50</div>
                   </div>
-                ))}
+                  <div className="text-green-400 bg-green-400/10 px-2 py-1 rounded text-xs font-bold">+4.2%</div>
+                </div>
+                {/* Card 2 */}
+                <div className="p-5 rounded-xl border border-white/10 bg-white/5 backdrop-blur-md">
+                  <div className="text-xs text-white/40 uppercase tracking-wider mb-1">24h Vol</div>
+                  <div className="text-lg font-mono text-white/80">$42.8B</div>
+                </div>
+                {/* Card 3 */}
+                <div className="p-5 rounded-xl border border-white/10 bg-white/5 backdrop-blur-md">
+                  <div className="text-xs text-white/40 uppercase tracking-wider mb-1">Dominance</div>
+                  <div className="text-lg font-mono text-white/80">54.2%</div>
+                </div>
               </div>
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                {[0, 1, 2].map((i) => (
-                  <button
-                    key={i}
-                    onClick={() => setCurrentTestimonial(i)}
-                    className={`h-2 rounded-full transition-all ${
-                      currentTestimonial === i
-                        ? "w-8 bg-white"
-                        : "w-2 bg-white/30"
-                    }`}
-                  />
-                ))}
+            </div>
+          </div>
+        </section>
+
+        {/* 3. MEMECOIN / ON-CHAIN */}
+        <section className="relative z-10 px-6 py-24 border-t border-white/5 fade-in opacity-0 translate-y-10 transition-all duration-700">
+           <div className="mx-auto max-w-6xl flex flex-col md:flex-row items-center gap-12 lg:gap-20">
+            {/* Left: Content */}
+            <div className="flex-1 space-y-6 text-center md:text-left">
+              <div className="inline-flex items-center justify-center md:justify-start gap-2 text-purple-300 mb-2">
+                <ScanSearch className="w-5 h-5" />
+                <span className="text-xs font-bold uppercase tracking-widest text-white/50">DexScreener</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-white">
+                Catch the 100x <br />
+                <span className="text-white/50">before it trends.</span>
+              </h2>
+              <p className="text-white/60 leading-relaxed max-w-lg mx-auto md:mx-0">
+                Missed the last pump? Never again. Paste any contract address—from any chain—and get an instant audit. Luminai unifies DexScreener and block explorers to spot liquidity locks and honeypots instantly.
+              </p>
+            </div>
+
+            {/* Right: Visual Mockup */}
+            <div className="flex-1 w-full max-w-md">
+              <div className="relative rounded-xl border border-white/10 bg-[#0A0A0A] overflow-hidden p-1">
+                 {/* Fake Search Bar */}
+                 <div className="flex items-center gap-3 px-4 py-3 border-b border-white/5 bg-white/5">
+                    <Search size={14} className="text-white/40"/>
+                    <div className="text-xs text-white/30 font-mono">0x7d1...2a9 (Scan)</div>
+                 </div>
+                 {/* Results */}
+                 <div className="p-6 space-y-4">
+                    <div className="flex items-start gap-4">
+                       <div className="w-10 h-10 rounded bg-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold text-xs">
+                          PEPE
+                       </div>
+                       <div>
+                          <div className="text-sm font-bold text-white">Pepe Coin</div>
+                          <div className="text-xs text-white/50 mt-1">Pair created: 14 mins ago</div>
+                       </div>
+                    </div>
+                    <div className="h-px w-full bg-white/5" />
+                    <div className="grid grid-cols-2 gap-4">
+                       <div>
+                          <div className="text-[10px] uppercase text-white/30">Liquidity</div>
+                          <div className="text-xs text-green-400 font-mono mt-1">LOCKED 🔒</div>
+                       </div>
+                       <div>
+                          <div className="text-[10px] uppercase text-white/30">Honeypot</div>
+                          <div className="text-xs text-green-400 font-mono mt-1">NO ✅</div>
+                       </div>
+                    </div>
+                 </div>
               </div>
             </div>
           </div>
         </section>
 
         {/* CTA SECTION */}
-        <section className="px-6 py-24 fade-in opacity-0 translate-y-10 transition-all duration-700">
+        <section className="px-6 py-24 fade-in opacity-0 translate-y-10 transition-all duration-700 border-t border-white/5">
           <div className="mx-auto max-w-4xl text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.2em] text-white/60 mb-6">
               <span className="h-1.5 w-1.5 rounded-full bg-white/70" />
@@ -521,9 +485,9 @@ export default function Home() {
             </p>
             <Link
               href="/chat"
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-8 py-4 text-sm font-semibold text-black hover:bg-white/90 transition-all shadow-[0_0_40px_rgba(255,255,255,0.3)]"
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-8 py-4 text-sm font-bold text-black hover:bg-white/90 transition-all shadow-[0_0_40px_rgba(255,255,255,0.3)]"
             >
-              Open Chat Interface
+              Luminai Chat Interface
               <span>→</span>
             </Link>
           </div>
@@ -536,21 +500,15 @@ export default function Home() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="flex items-center gap-3">
               <div className="h-8 w-8 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center">
-                <span className="text-xs font-semibold">Lu</span>
+                <span className="text-xs font-semibold">L</span>
               </div>
               <div>
                 <span className="font-medium">Luminai</span>
-                <p className="text-white/60 text-xs mt-1">
-                  Crypto‑native AI companion
-                </p>
               </div>
             </div>
             <div className="text-center md:text-right">
-              <p className="text-white/40 text-xs">
+              <p className="text-white text-xs">
                 © {new Date().getFullYear()} Luminai. All rights reserved.
-              </p>
-              <p className="text-white/30 text-xs mt-1">
-                Built for realtime crypto understanding
               </p>
             </div>
           </div>

@@ -1,14 +1,17 @@
-// app/chat/page.tsx
+// frontend/app/chat/page.tsx
+
 'use client';
 
 import ChatContainer from "./components/ChatContainer";
-import FloatingCommandBar from "./components/FloatingCommandBar";
+import SideBar from "./components/SideBar"; // ← your new full sidebar component
+import StatusFooter from "./components/StatusFooter";
 
 export default function ChatPage() {
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col">
+    <div className="min-h-screen bg-black text-white flex flex-col relative">
+      
       {/* HEADER */}
-      <header className="p-4 border-b border-white/10 bg-black/70 backdrop-blur-md sticky top-0 z-10">
+      <header className="p-4 border-b border-white/10 bg-black/70 backdrop-blur-md sticky top-0 z-30">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="h-8 w-8 rounded-lg bg-white flex items-center justify-center text-black font-bold">
@@ -20,11 +23,14 @@ export default function ChatPage() {
         </div>
       </header>
 
+      {/* SIDEBAR */}
+      <SideBar />
+
       {/* MAIN CHAT */}
       <ChatContainer />
 
-      {/* FLOATING COMMAND BAR */}
-      <FloatingCommandBar />
+      {/* FOOTER */}
+      <StatusFooter />
     </div>
   );
 }

@@ -1,5 +1,3 @@
-// frontend/app/chat/components/StatusFooter.tsx
-
 "use client";
 
 import { usePathname } from "next/navigation";
@@ -19,56 +17,93 @@ export default function StatusFooter({ onHeightChange }: { onHeightChange?: (h: 
   if (!show) return null;
 
   return (
-    <div ref={footerRef} className="pointer-events-none fixed inset-x-0 bottom-6 flex justify-center z-30">
-      <div className="flex items-center gap-4 text-[12px] text-white/60 tracking-tight">
-
-        <div className="flex items-center gap-1.75 px-3 py-1.5 rounded-full border-2 border-green-700/60 bg-green-400/10">
+    <div
+      ref={footerRef}
+      className="
+        fixed right-5 top-1/2 -translate-y-1/2
+        flex flex-col gap-4
+        z-30 pointer-events-none
+      "
+    >
+      {/* Google Gemini */}
+      <div className="flex items-center justify-end gap-2 w-full">
+        <div className="
+          pointer-events-auto 
+          flex items-center justify-center
+          gap-1.75 px-3 py-1.5 rounded-full 
+          border-2 border-green-700/60 bg-green-400/10
+        ">
           <img 
             src="https://static.vecteezy.com/system/resources/previews/055/687/065/non_2x/gemini-google-icon-symbol-logo-free-png.png"
             alt="Google Gemini Logo"
             className="inline h-3 w-3 object-contain translate-y-px"
           />
-          <span>Google Gemini 2.5</span>
-          <span className="status-dot h-1.5 w-1.5 rounded-full bg-green-400"></span>
+          <span className="text-[12px] text-white/60 tracking-tight">Gemini 2.5 Flash</span>
         </div>
 
-        <span className="text-white/30">•</span>
+        <span className="status-dot h-1.5 w-1.5 rounded-full bg-green-400"></span>
+      </div>
 
-        <div className="flex items-center gap-1.75 px-3 py-1.5 rounded-full border-2 border-red-600/70 bg-red-500/10">
+
+      {/* CoinGecko */}
+      <div className="flex items-center justify-end gap-2 w-full">
+        <div className="
+          pointer-events-auto 
+          flex items-center justify-center
+          gap-1.75 px-3 py-1.5 rounded-full 
+          border-2 border-red-600/70 bg-red-500/10
+        ">
           <img 
             src="https://support.coingecko.com/hc/article_attachments/4499575478169"
             alt="CoinGecko Logo"
             className="inline h-3 w-3 object-contain translate-y-px"
           />
-          <span>CoinGecko API</span>
-          <span className="status-dot h-1.5 w-1.5 rounded-full bg-red-500"></span>
+          <span className="text-[12px] text-white/60 tracking-tight">CoinGecko API</span>
         </div>
 
-        <span className="text-white/30">•</span>
+        <span className="status-dot h-1.5 w-1.5 rounded-full bg-red-500"></span>
+      </div>
 
-        <div className="flex items-center gap-1.75 px-3 py-1.5 rounded-full border-2 border-green-700/60 bg-green-400/10">
+
+      {/* CryptoRank */}
+      <div className="flex items-center justify-end gap-2 w-full">
+        <div className="
+          pointer-events-auto 
+          flex items-center justify-center
+          gap-1.75 px-3 py-1.5 rounded-full 
+          border-2 border-green-700/60 bg-green-400/10
+        ">
           <img 
             src="https://cryptorank.io/static/logo.png"
             alt="CryptoRank Logo"
             className="inline h-3 w-3 object-contain translate-y-px"
           />
-          <span>CryptoRank API</span>
-          <span className="status-dot h-1.5 w-1.5 rounded-full bg-green-400"></span>
+          <span className="text-[12px] text-white/60 tracking-tight">CryptoRank API</span>
         </div>
 
-        <span className="text-white/30">•</span>
+        <span className="status-dot h-1.5 w-1.5 rounded-full bg-green-400"></span>
+      </div>
 
-        <div className="flex items-center gap-1.75 px-3 py-1.5 rounded-full border-2 border-green-700/60 bg-green-400/10">
+
+      {/* DexScreener */}
+      <div className="flex items-center justify-end gap-2 w-full">
+        <div className="
+          pointer-events-auto 
+          flex items-center justify-center
+          gap-1.75 px-3 py-1.5 rounded-full 
+          border-2 border-green-700/60 bg-green-400/10
+        ">
           <img 
             src="https://play-lh.googleusercontent.com/ewszj7zGWgTQCUEsf_kfEkrnEZEMmvBn0hnb5vWBHQU2Yfnf30ayTNT9KoYsaQPoQ3k"
             alt="DexScreener Logo"
             className="inline h-3 w-3 object-contain translate-y-px"
           />
-          <span>DEXSCREENER API</span>
-          <span className="status-dot h-1.5 w-1.5 rounded-full bg-green-400"></span>
+          <span className="text-[12px] text-white/60 tracking-tight">DEXSCREENER API</span>
         </div>
 
+        <span className="status-dot h-1.5 w-1.5 rounded-full bg-green-400"></span>
       </div>
+
     </div>
   );
 }

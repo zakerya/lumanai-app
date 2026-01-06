@@ -59,7 +59,7 @@ export default function InputBar({
   return (
     <form
       onSubmit={(e) => onSend(e, mode)}
-      style={{ bottom: footerHeight + 80 }}
+      style={{ bottom: footerHeight + 40 }}
       className="pointer-events-none fixed inset-x-0 flex justify-center px-4 z-40"
     >
       <div

@@ -28,7 +28,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       >
         <div className="flex-1 flex flex-col">{children}</div>
 
-        <StatusFooter />
       </body>
     </html>
   );
