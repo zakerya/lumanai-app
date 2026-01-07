@@ -88,7 +88,7 @@ export default function SideBar() {
       <aside
         className="
           fixed top-1/2 -translate-y-1/2 left-20 z-40
-          w-56 pointer-events-none
+          w-58 pointer-events-none
         "
       >
         <div
@@ -99,10 +99,17 @@ export default function SideBar() {
           `}
         >
           {showItems && (
-            <nav className="flex flex-col gap-2 px-3 py-4 animate-fadeIn">
+            <nav className="flex flex-col gap-3 px-3 py-4 animate-fadeIn">
               <SidebarItem icon={null} label={<>Price Converter <br /><code className="text-white">(Coming Soon)</code></>} className="bg-red-500/20 border-2 border-red-600/70 rounded-xl"/>
               <SidebarItem icon={null} label={<>CoinScan <br /><code className="text-white">(Coming Soon)</code></>} className="bg-red-500/20 border-2 border-red-600/70 rounded-xl"/>
-              <SidebarItem icon={null} label={<>Wallet Tracker <br /><code className="text-white">(Coming Soon)</code></>} className="bg-red-500/20 border-2 border-red-600/70 rounded-xl"/>
+              
+              <Link href="/waller-tracker">
+                <SidebarItem 
+                  label={<>Wallet Tracker <code className="text-white">(New)</code></>} 
+                  rightIcon={<ArrowUpRight size={24} className="text-green-400" />} 
+                  className="bg-green-400/20 border-2 border-green-700/60 rounded-xl"/>
+              </Link>
+
               <Link href="/docs">
                 <SidebarItem 
                   label={<>Docs <code className="text-white">(NEW)</code></>} 
